@@ -1,6 +1,6 @@
 html, body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #333;
+  background-color: #424242;
   margin: 0;
 }
 
@@ -58,5 +58,19 @@ input {
 }
 
 .chart {
-    background-color: #AAA;
+    background-color: #DDD;
+    margin: 0 auto;
+    display: block;
+    opacity: 0.8;
+}
+
+#wrapstock {
+    margin: 0 auto;
+    background-color: #DDD;
+    width: 900px;
+    height: 100px;
+    opacity: 0.8;
+}
+
+#chart {
 }

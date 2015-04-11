@@ -28,3 +28,5 @@ node_modules
 
 keys.js
 bower_components/
+*.crt
+*.key

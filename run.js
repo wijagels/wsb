@@ -54,6 +54,17 @@ var highlight = function(string) {
     }
 }
 
+exports.getChart = function(sym, callback) {
+    yahooFinance.historical({
+        symbol: sym,
+        from: '2015-03-30',
+        to: '2015-04-10'
+    }, function (err, quotes) {
+        //console.log(quotes);
+        callback(quotes);
+    });
+}
+
 yahooFinance.snapshot({
     symbol: 'CSS',
     fields: ['s', 'n', 'd1', 'l1', 'y', 'r'],
@@ -62,10 +73,4 @@ yahooFinance.snapshot({
     console.dir(snapshot);
 });
 
-yahooFinance.historical({
-  symbol: 'TSLA',
-  from: '2015-04-06',
-  to: '2015-04-10'
-}, function (err, quotes) {
-    console.log(quotes);
-});
+

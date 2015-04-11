@@ -32,8 +32,8 @@ function buildChart(data){
     .domain([d3.min(data.map(function(x) {return x["Low"];})), d3.max(data.map(function(x){return x["High"];}))])
     .range([height-margin, margin]);
     var x = d3.scale.linear()
-    .domain([d3.min(data.map(function(d){return dateFormat.parse(d.Date).getTime();})),
-            d3.max(data.map(function(d){return dateFormat.parse(d.Date).getTime();}))])
+    .domain([d3.min(data.map(function(d){return dateFormat.parse(d.date).getTime();})),
+            d3.max(data.map(function(d){return dateFormat.parse(d.date).getTime();}))])
             .range([margin,width-margin]);
 
             chart.selectAll("line.x")
@@ -80,7 +80,7 @@ function buildChart(data){
             chart.selectAll("rect")
             .data(data)
             .enter().append("svg:rect")
-            .attr("x", function(d) { return x(dateFormat.parse(d.Date).getTime()); })
+            .attr("x", function(d) { return x(dateFormat.parse(d.date).getTime()); })
             .attr("y", function(d) {return y(max(d.Open, d.Close));})
             .attr("height", function(d) { return y(min(d.Open, d.Close))-y(max(d.Open, d.Close));})
             .attr("width", function(d) { return 0.5 * (width - 2*margin)/data.length; })
@@ -90,8 +90,8 @@ function buildChart(data){
             .data(data)
             .enter().append("svg:line")
             .attr("class", "stem")
-            .attr("x1", function(d) { return x(dateFormat.parse(d.Date).getTime()) + 0.25 * (width - 2 * margin)/ data.length;})
-            .attr("x2", function(d) { return x(dateFormat.parse(d.Date).getTime()) + 0.25 * (width - 2 * margin)/ data.length;})
+            .attr("x1", function(d) { return x(dateFormat.parse(d.date).getTime()) + 0.25 * (width - 2 * margin)/ data.length;})
+            .attr("x2", function(d) { return x(dateFormat.parse(d.date).getTime()) + 0.25 * (width - 2 * margin)/ data.length;})
             .attr("y1", function(d) { return y(d.High);})
             .attr("y2", function(d) { return y(d.Low); })
             .attr("stroke", function(d){ return d.Open > d.Close ? "red" : "green"; })
@@ -100,37 +100,18 @@ function buildChart(data){
 
 
 function appendToData(x){
-    if(data.length > 0){
-        return;
-    }
-    data = x.query.results.quote;
+    data = x;
     for(var i=0;i<data.length;i++){
         data[i].timestamp = (new Date(data[i].date).getTime() / 1000);
     }
-    data = data.sort(function(x, y){ return dateFormat.parse(x.Date).getTime() - dateFormat.parse(y.Date).getTime(); });
+    data = data.sort(function(x, y){
+        x.date = x.date.substring(0,10);
+        y.date = y.date.substring(0,10);
+        console.log(typeof x.date);
+        console.log(x.date);
+        return dateFormat.parse(x.date).getTime() -
+            dateFormat.parse(y.date).getTime();
+    });
     buildChart(data);
 }
 
-function buildQuery(){
-    var symbol = window.location.hash;
-    if(symbol === ""){
-        symbol = "AMZN";
-    }
-    symbol = symbol.replace("#", "");
-    var base = "select * from yahoo.finance.historicaldata where symbol = \"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
-    var getDateString = d3.time.format("%Y-%m-%d");
-    var query = base.format(symbol, getDateString(start), getDateString(end));
-    query = encodeURIComponent(query);
-    var url = "http://query.yahooapis.com/v1/public/yql?q={0}&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=appendToData".format(query);
-    return url;
-}
-function fetchData(){
-    url = buildQuery();
-    scriptElement = document.createElement("SCRIPT");
-    scriptElement.type = "text/javascript";
-    // i add to the url the call back function
-    scriptElement.src = url;
-    document.getElementsByTagName("HEAD")[0].appendChild(scriptElement);
-}
-
-$(document).ready(fetchData);

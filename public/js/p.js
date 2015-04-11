@@ -5,7 +5,7 @@
 /* config dom id (optional) + config particles params */
 particlesJS('particles-js', {
     particles: {
-        color: '#D00',
+        color: '#EF5350',
         color_random: false,
         shape: 'circle', // "circle", "edge" or "triangle"
         opacity: {
@@ -23,7 +23,7 @@ particlesJS('particles-js', {
         line_linked: {
             enable_auto: true,
             distance: 100,
-            color: '#0D3',
+            color: '#81C784',
             opacity: 1,
             width: 2,
             condensed_mode: {
