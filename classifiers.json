@@ -1,0 +1,13 @@
+{
+    "short": "sell",
+    "put": "sell",
+    "puts": "sell",
+    "dump": "sell",
+    "drop": "sell",
+    "call": "buy",
+    "calls": "buy",
+    "long": "buy",
+    "move up": "buy",
+    "straddle": "volatile",
+    "strangle": "volatile"
+}
