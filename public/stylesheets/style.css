@@ -57,6 +57,6 @@ input {
     line-height: 1.3em
 }
 
-#chart {
+.chart {
     background-color: #AAA;
 }
