@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var run = require('../run.js');
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+    res.render('stock');
+});
+
+router.get('/:symb', function(req, res, next) {
+  res.send(req.params.symb);
 });
 
 module.exports = router;

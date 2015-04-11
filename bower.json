@@ -1,0 +1,21 @@
+{
+  "name": "wsb",
+  "version": "0.0.1",
+  "homepage": "https://github.com/wijagels/wsb",
+  "authors": [
+    "William Jagels <will.jagels@gmail.com>"
+  ],
+  "description": "Make infinity monies",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "particles.js": "~1.1.0",
+    "jquery": "~2.1.3"
+  }
+}

@@ -4,10 +4,12 @@
     "puts": "sell",
     "dump": "sell",
     "drop": "sell",
+    "correction": "sell",
     "call": "buy",
     "calls": "buy",
     "long": "buy",
-    "move up": "buy",
+    "up": "buy",
     "straddle": "volatile",
-    "strangle": "volatile"
+    "strangle": "volatile",
+    "volatile": "volatile"
 }
