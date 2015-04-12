@@ -23,7 +23,6 @@ router.get('/:symb/gen2', function(req, res, next) {
     file.readFile('public/js/ochart.js', function (err, data) {
         if (err) throw err;
         var send = data.replace("<<REPLACEME>>", req.params.symb);
-        console.log(send);
         res.send(send);
     });
 });
@@ -36,6 +35,12 @@ router.get('/:symb/twitter', function(req, res, next) {
 
 router.get('/:symb/rwsb', function(req, res, next) {
     run.avgWsb(req.params.symb, function(result) {
+        res.send(result.toString());
+    });
+});
+
+router.get('/:symb/investing', function(req, res, next) {
+    run.avgInvesting(req.params.symb, function(result) {
         res.send(result.toString());
     });
 });

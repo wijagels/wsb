@@ -16,6 +16,7 @@ block scripts
         $("input").keypress(function(event) {
             if (event.which == 13) {
                 event.preventDefault();
+                location.href = location.href + "sym/" + $("input").val().toUpperCase() + "/";
                 $("form").submit();
             }
         });

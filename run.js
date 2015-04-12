@@ -77,7 +77,7 @@ exports.avgTwitter = function(symbol, callback) {
 
 exports.avgWsb = function(symbol, callback) {
     var getWsb = {
-        url: 'https://api.reddit.com/r/wallstreetbets/search?q=' + symbol + '&restrict_sr=true',
+        url: 'https://api.reddit.com/r/wallstreetbets/search?q=' + symbol + '&restrict_sr=true&t=week',
         headers: {
             'User-Agent': 'wsbbot'
         }
@@ -90,8 +90,30 @@ exports.avgWsb = function(symbol, callback) {
             var obj = raw.data.children[key].data;
             var combined = obj.title + " " + obj.selftext;
             sum++;
+            total += sentiment(combined).comparative;
+        }
+        callback(total/sum);
+    });
+};
+
+
+exports.avgInvesting = function(symbol, callback) {
+    var getInvesting = {
+        url: 'https://api.reddit.com/r/investing/search?q=' + symbol + '&restrict_sr=true&t=week',
+        headers: {
+            'User-Agent': 'wsbbot'
+        }
+    }
+    request(getInvesting, function(error, response, body) {
+        var raw = JSON.parse(body);
+        var sum = 0;
+        var total = 0;
+        for(var key in raw.data.children) {
+            var obj = raw.data.children[key].data;
+            var combined = obj.title + " " + obj.selftext;
+            sum++;
             console.log(sentiment(combined));
-            total += sentiment(combined.comparative);
+            total += sentiment(combined).comparative;
         }
         callback(total/sum);
     });
