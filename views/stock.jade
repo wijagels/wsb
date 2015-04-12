@@ -1,15 +1,55 @@
 extends layout
+block styles
+    link(rel='stylesheet', href='/epoch/epoch.min.css')
 
 block content
     #wrapstock
+        h1 #{symbol}
+        .epoch.gague-medium.sentiment.column-left#rwsb
+            h3 /r/wallstreetbets
+        .epoch.gague-medium.sentiment.column-center#invs
+            h3 /r/investing
+        .epoch.gague-medium.sentiment.column-right#twtr
+            h3 Twitter
+
 
     #chart
 
     #particles-js
 block scripts
-    script(src='http://d3js.org/d3.v2.js')
-    script(src='/jquery/dist/jquery.min.js')
+    script(src='/d3/d3.min.js')
+    script(src='/jquery/dist/jquery.js')
     //script(src='/js/ochart.js')
     script(src='gen2')
     script(src="/particles.js/particles.js")
     script(src="/js/p.js")
+    script(src="/epoch/epoch.min.js")
+    script.
+        $.get("rwsb", function(data) {
+            data = parseFloat(data);
+            data *= 5;
+            data += 0.5;
+            $('#rwsb').epoch({
+                type: 'time.gauge',
+                value: data
+            });
+        });
+        $.get("investing", function(data) {
+            data = parseFloat(data);
+            data *= 5;
+            data += 0.5;
+            $('#invs').epoch({
+                type: 'time.gauge',
+                value: data
+            });
+        });
+        $.get("twitter", function(data) {
+            console.log(parseFloat(data) + 0.5);
+            data = parseFloat(data);
+            data *= 5;
+            data += 0.5;
+            $('#twtr').epoch({
+                type: 'time.gauge',
+                value: data
+            });
+        });

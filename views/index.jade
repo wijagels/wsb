@@ -5,9 +5,17 @@ block content
         h1 Ready to predict the future?
         h2 Enter your symbol below
         input.form-control.input-lg
-        p(style="font-size: 12px; padding-top: 5px") This isn't investment advice.
+        p This isn't investment advice.
     #particles-js
 
 block scripts
     script(src="/particles.js/particles.js")
     script(src="/js/p.js")
+    script(src="/jquery/dist/jquery.min.js")
+    script.
+        $("input").keypress(function(event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                $("form").submit();
+            }
+        });

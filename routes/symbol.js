@@ -2,13 +2,14 @@ var express = require('express');
 var router = express.Router();
 var run = require('../run.js');
 var file = require('read-file');
+var colors = require('colors');
 
 var obj;
 
 
 
 router.get('/:symb', function(req, res, next) {
-    res.render('stock');
+    res.render('stock', {symbol: req.params.symb});
 });
 
 router.get('/:symb/gen', function(req, res, next) {
@@ -24,6 +25,18 @@ router.get('/:symb/gen2', function(req, res, next) {
         var send = data.replace("<<REPLACEME>>", req.params.symb);
         console.log(send);
         res.send(send);
+    });
+});
+
+router.get('/:symb/twitter', function(req, res, next) {
+    run.avgTwitter(req.params.symb, function(result) {
+        res.send(result.toString());
+    });
+});
+
+router.get('/:symb/rwsb', function(req, res, next) {
+    run.avgWsb(req.params.symb, function(result) {
+        res.send(result.toString());
     });
 });
 

@@ -6,7 +6,6 @@ var docs = require('./classifiers.json');
 var sentiment = require('sentiment');
 var yahooFinance = require('yahoo-finance');
 var colors = require('colors');
-var utf8 = require('utf8');
 
 classifier.events.on('trainedWithDocument', function (obj) {
    console.log(obj);
@@ -40,13 +39,13 @@ request(getHot, function(error, response, body) {
 var highlight = function(string) {
     switch(string) {
         case "sell":
-            return utf8.encode(string.red);
+            return string.red;
             break;
         case "buy":
-            return utf8.encode(string.green);
+            return string.green;
             break;
         case "volatile":
-            return utf8.encode(string.yellow);
+            return string.yellow;
             break;
         default:
             return string;
@@ -54,23 +53,46 @@ var highlight = function(string) {
     }
 }
 
-exports.getChart = function(sym, callback) {
-    yahooFinance.historical({
-        symbol: sym,
-        from: '2015-03-30',
-        to: '2015-04-10'
-    }, function (err, quotes) {
-        //console.log(quotes);
-        callback(quotes);
+exports.avgTwitter = function(symbol, callback) {
+    var Twit = require('twit')
+    var T = new Twit({
+        consumer_key: keys.TWITTER_KEY
+        , consumer_secret: keys.TWITTER_SECRET
+        , access_token: keys.TWITTER_TOKEN
+        , access_token_secret: keys.TWITTER_TOKEN_SECRET
+    })
+    T.get('search/tweets', { q: '$' + symbol + ' since:2011-11-11', count: 100 }, function(err, data, response) {
+        var tweets = data.statuses;
+        var total = 0;
+        for(var k in tweets) {
+            total += sentiment(tweets[k].text).comparative;
+        }
+        console.log(total/100);
+        total /= 100;
+        callback(total);
     });
 }
 
-yahooFinance.snapshot({
-    symbol: 'CSS',
-    fields: ['s', 'n', 'd1', 'l1', 'y', 'r'],
-}, function (err, snapshot) {
-    console.log(err);
-    console.dir(snapshot);
-});
 
 
+exports.avgWsb = function(symbol, callback) {
+    var getWsb = {
+        url: 'https://api.reddit.com/r/wallstreetbets/search?q=' + symbol + '&restrict_sr=true',
+        headers: {
+            'User-Agent': 'wsbbot'
+        }
+    }
+    request(getWsb, function(error, response, body) {
+        var raw = JSON.parse(body);
+        var sum = 0;
+        var total = 0;
+        for(var key in raw.data.children) {
+            var obj = raw.data.children[key].data;
+            var combined = obj.title + " " + obj.selftext;
+            sum++;
+            console.log(sentiment(combined));
+            total += sentiment(combined.comparative);
+        }
+        callback(total/sum);
+    });
+};
